@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños con Osciladores</title>
+</head>
+<body>
+    <h1>Feliz Cumpleaños</h1>
+    <button id="playButton">Reproducir</button>
+    
+    <script>
+        // Función para reproducir la canción de cumpleaños
+        function playBirthdaySong() {
+            // Crear un contexto de audio
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Frecuencias para las notas de la canción
+            const frequencies = [
+                261.63, 261.63, 293.66, 261.63, 349.23, 329.63,
+                261.63, 261.63, 293.66, 261.63, 392, 349.23,
+                261.63, 261.63, 523.25, 440,
+                349.23, 349.23, 329.63, 293.66, 329.63, 349.23,
+                261.63, 392, 349.23,
+                293.66, 293.66, 293.66, 329.63, 349.23,
+                261.63, 261.63, 293.66, 261.63, 392, 349.23
+            ];
+            
+            // Duraciones de las notas
+            const durations = [
+                500, 500, 1000, 1000, 1000, 2000,
+                500, 500, 1000, 1000, 1000, 2000,
+                500, 500, 1000, 1000,
+                500, 500, 1000, 1000, 1000, 1000,
+                500, 1000, 1000,
+                1000, 500, 500, 500, 1000,
+                500, 500, 1000, 1000, 1000, 2000
+            ];
+            
+            // Crear un oscilador
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine'; // Tipo de onda sinusoidal
+            
+            // Conectar el oscilador al destino de audio (altavoces)
+            oscillator.connect(audioContext.destination);
+            
+            // Iniciar la reproducción
+            oscillator.start();
+            
+            // Reproducir la canción
+            let time = audioContext.currentTime;
+            for (let i = 0; i < frequencies.length; i++) {
+                oscillator.frequency.setValueAtTime(frequencies[i], time);
+                time += durations[i] / 1000;
+            }
+            
+            // Detener la reproducción después de que termine la canción
+            oscillator.stop(time);
+        }
+        
+        // Obtener el botón de reproducción y agregar un evento de clic
+        const playButton = document.getElementById('playButton');
+        playButton.addEventListener('click', playBirthdaySong);
+    </script>
+</body>
+</html>
